@@ -1,58 +1,50 @@
 #!/usr/bin/python3
+"""log parsing"""
+
 import sys
-import signal
 
 
-total_size = 0
-status_counts = {200: 0, 301: 0, 400: 0, 403: 0, 404: 0, 405: 0, 500: 0}
-line_count = 0
+if __name__ == "__main__":
+    total_size = 0
+    count = 0
+    codes = ["200", "301", "400", "401", "403", "404", "405", "500"]
+    stats = {k: 0 for k in codes}
 
-
-def print_stats(total_size, status_counts):
+    def print_stats(stats: dict, file_size: int) -> None:
     """
-    Print the accumulated metrics
+    Print the accumulated statistics.
     """
-    print(f"File size: {total_size}")
-    for status in sorted(status_counts.keys()):
-        if status_counts[status] > 0:
-            print(f"{status}: {status_counts[status]}")
+    print("File size: {:d}".format(file_size))
+    for k in sorted(stats.keys()):
+        if stats[k]:
+            print("{}: {}".format(k, stats[k]))
 
+    try:
+        for line in sys.stdin:
+            count += 1
+            data = line.split()
 
-def signal_handler(sig, frM):
-    """
-    Handle keyboard interruption signal
-    """
-    print_stats(total_size, status_counts)
-    sys.exit(0)
+            if len(data) < 7:
+                continue
 
-signal.signal(signal.SIGINT, signal_handler)
+            try:
+                status_code = data[-2]
+                if status_code in stats:
+                    stats[status_code] += 1
+            except IndexError:
+                pass
 
-try:
-    for line in sys.stdin:
-        parts = line.split()
-        
-        if len(parts) < 7:
-            continue
-        
-        try:
-            status_code = int(parts[-2])
-            file_size = int(parts[-1])
-            
-            total_size += file_size
+            try:
+                file_size = int(data[-1])
+                total_size += file_size
+            except (IndexError, ValueError):
+                pass
 
-            if status_code in status_counts:
-                status_counts[status_code] += 1
+            if count % 10 == 0:
+                print_stats(stats, total_size)
 
-            line_count += 1
+        print_stats(stats, total_size)
 
-            if line_count % 10 == 0:
-                print_stats(total_size, status_counts)
-
-        except (ValueError, IndexError):
-            continue
-
-except KeyboardInterrupt:
-    print_stats(total_size, status_counts)
-    sys.exit(0)
-
-print_stats(total_size, status_counts)
+    except KeyboardInterrupt:
+        print_stats(stats, total_size)
+        raise
