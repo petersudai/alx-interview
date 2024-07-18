@@ -10,7 +10,7 @@ if __name__ == "__main__":
     count = 0
     codes = ["200", "301", "400", "401", "403", "404", "405", "500"]
     stats = {k: 0 for k in codes}
-    
+
     def print_stats(stats: dict, file_size: int) -> None:
         """
         Print the accumulated statistics.
