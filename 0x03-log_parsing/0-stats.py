@@ -2,6 +2,10 @@
 import sys
 
 
+total_size = 0
+status_counts = {200: 0, 301: 0, 400: 0, 403: 0, 404: 0, 405: 0, 500: 0}
+line_count = 0
+
 def print_stats(total_size, status_counts):
     """
     Print the accumulated metrics
@@ -10,10 +14,6 @@ def print_stats(total_size, status_counts):
     for status in sorted(status_counts.keys()):
         if status_counts[status] > 0:
             print(f"{status}: {status_counts[status]}")
-
-total_size = 0
-status_counts = {200: 0, 301: 0, 400: 0, 403: 0, 404: 0, 405: 0, 500: 0}
-line_count = 0
 
 try:
     for line in sys.stdin:
