@@ -5,13 +5,16 @@ Solves the N-Queens problem.
 
 import sys
 
+
 def print_usage():
     print("Usage: nqueens N")
     sys.exit(1)
 
+
 def print_error(message):
     print(message)
     sys.exit(1)
+
 
 def is_safe(board, row, col, n):
     """
@@ -34,6 +37,7 @@ def is_safe(board, row, col, n):
 
     return True
 
+
 def solve_nqueens(board, col, n, solutions):
     """
     Solve the N-Queens problem using backtracking.
@@ -51,7 +55,8 @@ def solve_nqueens(board, col, n, solutions):
         if is_safe(board, i, col, n):
             board[i][col] = 1
             solve_nqueens(board, col + 1, n, solutions)
-            board[i][col] = 0  # backtrack
+            board[i][col] = 0
+
 
 def nqueens(n):
     """
@@ -61,6 +66,7 @@ def nqueens(n):
     solutions = []
     solve_nqueens(board, 0, n, solutions)
     return solutions
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
