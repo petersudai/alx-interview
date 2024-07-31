@@ -15,6 +15,7 @@ def is_valid(board, row, col):
             return False
     return True
 
+
 def solve_nqueens(n, row, board, solutions):
     """ Solve the N Queens problem using backtracking """
     if row == n:
@@ -26,10 +27,12 @@ def solve_nqueens(n, row, board, solutions):
             board[row] = col
             solve_nqueens(n, row + 1, board, solutions)
 
+
 def print_solutions(solutions, n):
     """ Print the solutions in required format """
     for solution in solutions:
         print([[i, solution[i]] for i in range(n)])
+
 
 def main():
     """ Main function to handle input and solve problem """
@@ -51,6 +54,7 @@ def main():
     solutions = []
     solve_nqueens(n, 0, board, solutions)
     print_solutions(solutions, n)
+
 
 if __name__ == "__main__":
     main()
