@@ -20,6 +20,7 @@ if n < 4:
     print('N must be at least 4')
     sys.exit(1)
 
+
 def is_safe(board, row, col):
     """Check if it's safe to place a queen at the given position"""
     for i in range(row):
@@ -29,17 +30,19 @@ def is_safe(board, row, col):
             return False
     return True
 
+
 def solve_nqueens_rec(board, row, n, solutions):
     """Recursively solve the N Queens problem"""
     if row == n:
         solutions.append(board[:])
         return
-    
+
     for col in range(n):
         if is_safe(board, row, col):
             board[row] = col
             solve_nqueens_rec(board, row + 1, n, solutions)
             board[row] = -1
+
 
 def solve_nqueens(n):
     """Find all solutions for the N Queens problem"""
@@ -48,12 +51,14 @@ def solve_nqueens(n):
     solve_nqueens_rec(board, 0, n, solutions)
     return solutions
 
+
 def format_solution(solution):
     """Format the solution in the required output format"""
     formatted = []
     for i, col in enumerate(solution):
         formatted.append([i, col])
     return formatted
+
 
 # Solve the N Queens problem and print solutions
 solutions = solve_nqueens(n)
