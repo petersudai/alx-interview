@@ -5,48 +5,34 @@ const request = util.promisify(require('request'));
 
 const filmID = process.argv[2];
 
-async function fetchCharacter(url) {
-  try {
-    let character = await (await request(url)).body;
-    return JSON.parse(character).name;
-  } catch (error) {
-    console.error(`Failed to fetch character at ${url}:`, error);
-    return null;
-  }
+if (!filmID) {
+  console.error('Error: Please provide a valid Star Wars movie ID.');
+  process.exit(1);
 }
 
-async function fetchFilmDetails(filmId) {
-  const endpoint = `https://swapi-api.hbtn.io/api/films/${filmId}`;
+async function fetchJSON(url) {
   try {
-    let response = await (await request(endpoint)).body;
-    return JSON.parse(response);
+    const response = await request(url);
+    return JSON.parse(response.body);
   } catch (error) {
-    console.error(`Failed to fetch film details for film ID ${filmId}:`, error);
+    console.error(`Error fetching data from ${url}:`, error.message);
     process.exit(1);
   }
 }
 
-async function displayCharacters(characterUrls) {
-  console.log('Fetching character names, please wait...\n');
-  const promises = characterUrls.map(fetchCharacter);
-  const characterNames = await Promise.all(promises);
+async function fetchCharacters(characterUrls) {
+  const characterPromises = characterUrls.map(url => fetchJSON(url));
+  return await Promise.all(characterPromises);
+}
 
-  characterNames.forEach((name, index) => {
-    if (name) {
-      console.log(`${index + 1}. ${name}`);
-    }
+async function printCharacters(filmId) {
+  const filmUrl = `https://swapi-api.hbtn.io/api/films/${filmId}/`;
+  const filmData = await fetchJSON(filmUrl);
+  const characters = await fetchCharacters(filmData.characters);
+
+  characters.forEach(character => {
+    console.log(character.name);
   });
 }
 
-async function starwarsCharacters(filmId) {
-  const filmDetails = await fetchFilmDetails(filmId);
-  const characterUrls = filmDetails.characters;
-  await displayCharacters(characterUrls);
-}
-
-if (!filmID) {
-  console.error('Please provide a valid Star Wars movie ID.');
-  process.exit(1);
-}
-
-starwarsCharacters(filmID);
+printCharacters(filmID);
