@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/node
 
 const util = require('util');
 const request = util.promisify(require('request'));
