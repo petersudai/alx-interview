@@ -10,7 +10,7 @@ if (!filmID) {
   process.exit(1);
 }
 
-async function fetchJSON(url) {
+async function fetchJSON (url) {
   try {
     const response = await request(url);
     return JSON.parse(response.body);
@@ -20,12 +20,12 @@ async function fetchJSON(url) {
   }
 }
 
-async function fetchCharacters(characterUrls) {
+async function fetchCharacters (characterUrls) {
   const characterPromises = characterUrls.map(url => fetchJSON(url));
   return await Promise.all(characterPromises);
 }
 
-async function printCharacters(filmId) {
+async function printCharacters (filmId) {
   const filmUrl = `https://swapi-api.hbtn.io/api/films/${filmId}/`;
   const filmData = await fetchJSON(filmUrl);
   const characters = await fetchCharacters(filmData.characters);
