@@ -3,6 +3,7 @@
 This module provides solution to the "Change comes from within" problem
 """
 
+
 def makeChange(coins, total):
     """
     Determines the fewest number of coins needed to make the given total
@@ -11,7 +12,7 @@ def makeChange(coins, total):
         return 0
 
     dp = [total + 1] * (total + 1)
-    dp[0] = -
+    dp[0] = 0
 
     # Fill dp array using dynamic programming
     for coin in coins:
