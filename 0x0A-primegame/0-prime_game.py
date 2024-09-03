@@ -31,7 +31,7 @@ def isWinner(x, nums):
 
     if maria_wins > x / 2:
         return "Maria"
-    elif maria_wins < x/ 2:
+    elif maria_wins < x / 2:
         return "Ben"
     else:
         return None
